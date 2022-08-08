@@ -31,9 +31,9 @@ type TestParams struct {
 
 func getTestParams() (params *TestParams) {
 	return &TestParams{
-		Env:        os.Getenv("ENV"),
-		Token:      os.Getenv("ACCESS_TOKEN"),
-		Coin:       os.Getenv("COIN"),
+		Env:        "test", //os.Getenv("ENV"),
+		Token:      "b5917623a6bc3a49fc40f3b7f25d6ddf49f1992d0e46ed3f37c5e029d46601d2", //os.Getenv("ACCESS_TOKEN"),
+		Coin:       "tbtc", //os.Getenv("COIN"),
 		WalletId:   os.Getenv("WALLET_ID"),
 		Address:    os.Getenv("ADDRESS"),
 		TransferId: os.Getenv("TRANSFER_ID"),
