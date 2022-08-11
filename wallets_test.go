@@ -9,12 +9,15 @@ import (
 func TestListWallets(t *testing.T) {
 	coin, _ := getTestCoin(t)
 
-	_, err := coin.ListWallets(ListParams{
+	list, err := coin.ListWallets(ListParams{
 		Limit:     3,
 		AllTokens: true,
 	})
 	if err != nil {
 		t.Fatal(err.Error())
+	}
+	for _, w := range list.Wallets {
+		t.Log(w.ID, w.Label)
 	}
 }
 
