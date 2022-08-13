@@ -26,6 +26,12 @@ type ListWallets struct {
 		ApprovalsRequired int  `json:"approvalsRequired"`
 		CoinSpecific      struct {
 		} `json:"coinSpecific"`
+		Balance                int    `json:"balance"`
+		ConfirmedBalance       int    `json:"confirmedBalance"`
+		SpendableBalance       int    `json:"spendableBalance"`
+		BalanceString          string `json:"balanceString"`
+		ConfirmedBalanceString string `json:"confirmedBalanceString"`
+		SpendableBalanceString string `json:"spendableBalanceString"`
 	} `json:"wallets"`
 }
 
