@@ -1,6 +1,7 @@
 package bitgo
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -9,7 +10,7 @@ import (
 func TestListWallets(t *testing.T) {
 	coin, _ := getTestCoin(t)
 	list, err := coin.ListWallets(ListParams{
-		Limit:     3,
+		Limit:     50,
 		AllTokens: true,
 	})
 	if err != nil {
@@ -27,13 +28,16 @@ func TestGenerateWallet(t *testing.T) {
 
 	newLabel := randStringRunes(5)
 
-	_, err := coin.GenerateWallet(GenerateWalletParams{
-		Label:      newLabel,
+	w, err := coin.GenerateWallet(GenerateWalletParams{
+		Label:      fmt.Sprintf("%s - %s", params.Coin, newLabel),
 		Passphrase: params.Passphrase,
+		Enterprise: params.Enterprise,
+		GasPrice:   params.GasPrice,
 	})
 	if err != nil {
 		t.Fatal(err.Error())
 	}
+	t.Log("Newly generated wallet - ", "ID: ", w.ID, "; Label: ", w.Label, "; Balance: ", w.Balance)
 }
 
 // Get Wallet
@@ -79,4 +83,23 @@ func TestGetWalletByAddress(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 	t.Log("ID: ", w.ID, "; Label: ", w.Label, "; Balance: ", w.BalanceString)
+}
+
+/***
+Send btc or gteth
+*/
+func TestSendCoins(t *testing.T) {
+	coin, params := getTestCoin(t)
+
+	res, err := coin.SendCoins(params.WalletId, SendCoinsReq{
+		Address: params.Address,
+		Amount:  "5000",
+		//Amount:           "50000000000",
+		WalletPassphrase: params.Passphrase,
+		//GasPrice:         params.GasPrice,
+	})
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+	t.Log("txid: ", res.TxID, "; status: ", res.Status, "; value: ", res.Transfer.ValueString)
 }
