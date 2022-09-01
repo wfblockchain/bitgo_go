@@ -31,7 +31,7 @@ type TestParams struct {
 	GasPrice   int
 }
 
-func getTestParams() (params *TestParams) {
+func getTestParams_tbtc() (params *TestParams) {
 	return &TestParams{
 		Env:   "express_test",                                                        //os.Getenv("ENV"),
 		Token: "v2x5a924d9e8186042cef25a971d541e7e90d4499e8fef1630a5f8ced8a60acf852", //os.Getenv("ACCESS_TOKEN"),
@@ -72,8 +72,17 @@ func getTestParams_gteth() (params *TestParams) {
 		GasPrice:   500000,
 	}
 }
-func getTestBitGo(t *testing.T) (b *BitGo, params *TestParams) {
-	params = getTestParams()
+
+func getTestBitGo(t *testing.T, isEth ...bool) (b *BitGo, params *TestParams) {
+	isBtc := true
+	if len(isEth) > 0 {
+		isBtc = !isEth[0]
+	}
+	if isBtc {
+		params = getTestParams_tbtc()
+	} else {
+		params = getTestParams_gteth()
+	}
 
 	b, err := New(params.Env, time.Minute*5)
 	if err != nil {
@@ -83,8 +92,8 @@ func getTestBitGo(t *testing.T) (b *BitGo, params *TestParams) {
 	return b.Token(params.Token).Debug(true), params
 }
 
-func getTestCoin(t *testing.T) (coin *BitGo, params *TestParams) {
-	b, params := getTestBitGo(t)
+func getTestCoin(t *testing.T, isEth ...bool) (coin *BitGo, params *TestParams) {
+	b, params := getTestBitGo(t, isEth...)
 	coin = b.Coin(params.Coin)
 	return
 }
